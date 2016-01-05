@@ -2,13 +2,13 @@
 /**
  * Functions for interfacing with the database
  *
- * @class       S4WC_DB
+ * @class       P4WC_DB
  * @author      Stephen Zuniga
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-class S4WC_DB {
+class P4WC_DB {
 
     /**
      * Add/Update the customer database object
@@ -19,7 +19,7 @@ class S4WC_DB {
      * @return      mixed
      */
     public static function update_customer( $user_id, $customer_data ) {
-        global $s4wc;
+        global $p4wc;
 
         // Sample structure of $customer_data
         // $customer_data = array(
@@ -52,7 +52,7 @@ class S4WC_DB {
         $default_card = isset( $customer_data['default_card'] ) ? $customer_data['default_card'] : null;
 
         // Grab the current object out of the database and return a useable array
-        $currentObject = maybe_unserialize( get_user_meta( $user_id, $s4wc->settings['stripe_db_location'], true ) );
+        $currentObject = maybe_unserialize( get_user_meta( $user_id, $p4wc->settings['stripe_db_location'], true ) );
 
         // If there is an exising object, append values
         if ( $currentObject ) {
@@ -96,7 +96,7 @@ class S4WC_DB {
         }
 
         // Add to the database
-        return update_user_meta( $user_id, $s4wc->settings['stripe_db_location'], $newObject );
+        return update_user_meta( $user_id, $p4wc->settings['stripe_db_location'], $newObject );
     }
 
     /**
@@ -108,7 +108,7 @@ class S4WC_DB {
      * @return      mixed
      */
     public static function delete_customer( $user_id, $customer_data ) {
-        global $s4wc;
+        global $p4wc;
 
         // Sample structure of $customer_data
         // $customer_data = array(
@@ -120,7 +120,7 @@ class S4WC_DB {
         }
 
         // Grab the current object out of the database and return a useable array
-        $currentObject = maybe_unserialize( get_user_meta( $user_id, $s4wc->settings['stripe_db_location'], true ) );
+        $currentObject = maybe_unserialize( get_user_meta( $user_id, $p4wc->settings['stripe_db_location'], true ) );
 
         // If the object exists already, do work
         if ( $currentObject ) {
@@ -132,7 +132,7 @@ class S4WC_DB {
             }
 
             // Add to the database
-            return update_user_meta( $user_id, $s4wc->settings['stripe_db_location'], $newObject );
+            return update_user_meta( $user_id, $p4wc->settings['stripe_db_location'], $newObject );
         } else {
             return false;
         }

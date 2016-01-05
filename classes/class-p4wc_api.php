@@ -1,15 +1,15 @@
 <?php
 /**
- * Functions for interfacing with Stripe's API
+ * Functions for interfacing with Pay.js's API
  *
- * @class       S4WC_API
+ * @class       P4WC_API
  * @author      Stephen Zuniga
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-class S4WC_API {
-    public static $api_endpoint = 'https://api.stripe.com/v1/';
+class P4WC_API {
+    public static $api_endpoint = sk_test_c62fade9d045b54cd76d7036;
 
     /**
      * Create customer on stripe servers
@@ -22,9 +22,9 @@ class S4WC_API {
     public static function create_customer( $user_id, $customer_data ) {
 
         // Create a customer on Stripe servers
-        $customer = S4WC_API::post_data( $customer_data, 'customers' );
+        $customer = P4WC_API::post_data( $customer_data, 'customers' );
 
-        $key = S4WC_API::find_card_index( $customer->sources->data, 'id', $customer->default_source );
+        $key = P4WC_API::find_card_index( $customer->sources->data, 'id', $customer->default_source );
 
         if ( $key > -1 ) {
             $active_card = $customer->sources->data[ $key ];
@@ -41,7 +41,7 @@ class S4WC_API {
                 ),
                 'default_card'  => $active_card->id
             );
-            S4WC_DB::update_customer( $user_id, $customerArray );
+            P4WC_DB::update_customer( $user_id, $customerArray );
 
             return $customer;
         } else {
@@ -57,7 +57,7 @@ class S4WC_API {
      * @return      array
      */
     public static function get_customer( $customer_id ) {
-        return S4WC_API::get_data( 'customers/' . $customer_id );
+        return P4WC_API::get_data( 'customers/' . $customer_id );
     }
 
     /**
@@ -69,7 +69,7 @@ class S4WC_API {
      * @return      array
      */
     public static function update_customer( $customer_id, $customer_data ) {
-        return S4WC_API::post_data( $customer_data, 'customers/' . $customer_id );
+        return P4WC_API::post_data( $customer_data, 'customers/' . $customer_id );
     }
 
     /**
@@ -81,13 +81,13 @@ class S4WC_API {
      * @return      array
      */
     public static function delete_card( $user_id, $position = 0 ) {
-        global $s4wc;
+        global $p4wc;
 
-        $user_meta = get_user_meta( $user_id, $s4wc->settings['stripe_db_location'], true );
+        $user_meta = get_user_meta( $user_id, $p4wc->settings['stripe_db_location'], true );
 
-        S4WC_DB::delete_customer( $user_id, array( 'card' => $user_meta['cards'][ $position ]['id'] ) );
+        P4WC_DB::delete_customer( $user_id, array( 'card' => $user_meta['cards'][ $position ]['id'] ) );
 
-        return S4WC_API::delete_data( 'customers/' . $user_meta['customer_id'] . '/cards/' . $user_meta['cards'][ $position ]['id'] );
+        return P4WC_API::delete_data( 'customers/' . $user_meta['customer_id'] . '/cards/' . $user_meta['cards'][ $position ]['id'] );
     }
 
     /**
@@ -98,7 +98,7 @@ class S4WC_API {
      * @return      array
      */
     public static function create_charge( $charge_data ) {
-        return S4WC_API::post_data( $charge_data );
+        return P4WC_API::post_data( $charge_data );
     }
 
     /**
@@ -110,7 +110,7 @@ class S4WC_API {
      * @return      array
      */
     public static function capture_charge( $transaction_id, $charge_data ) {
-        return S4WC_API::post_data( $charge_data, 'charges/' . $transaction_id . '/capture' );
+        return P4WC_API::post_data( $charge_data, 'charges/' . $transaction_id . '/capture' );
     }
 
     /**
@@ -122,7 +122,7 @@ class S4WC_API {
      * @return      array
      */
     public static function create_refund( $transaction_id, $refund_data ) {
-        return S4WC_API::post_data( $refund_data, 'charges/' . $transaction_id . '/refunds' );
+        return P4WC_API::post_data( $refund_data, 'charges/' . $transaction_id . '/refunds' );
     }
 
     /**
@@ -133,19 +133,19 @@ class S4WC_API {
      * @return      array
      */
     public static function get_data( $get_location ) {
-        global $s4wc;
+        global $p4wc;
 
         $response = wp_remote_get( self::$api_endpoint . $get_location, array(
             'method'        => 'GET',
             'headers'       => array(
-                'Authorization' => 'Basic ' . base64_encode( $s4wc->settings['secret_key'] . ':' ),
+                'Authorization' => 'Basic ' . base64_encode( $p4wc->settings['secret_key'] . ':' ),
             ),
             'timeout'       => 70,
             'sslverify'     => false,
             'user-agent'    => 'WooCommerce-Stripe',
         ) );
 
-        return S4WC_API::parse_response( $response );
+        return P4WC_API::parse_response( $response );
     }
 
     /**
@@ -157,12 +157,12 @@ class S4WC_API {
      * @return      array
      */
     public static function post_data( $post_data, $post_location = 'charges' ) {
-        global $s4wc;
+        global $p4wc;
 
         $response = wp_remote_post( self::$api_endpoint . $post_location, array(
             'method'        => 'POST',
             'headers'       => array(
-                'Authorization' => 'Basic ' . base64_encode( $s4wc->settings['secret_key'] . ':' ),
+                'Authorization' => 'Basic ' . base64_encode( $p4wc->settings['secret_key'] . ':' ),
             ),
             'body'          => $post_data,
             'timeout'       => 70,
@@ -170,7 +170,7 @@ class S4WC_API {
             'user-agent'    => 'WooCommerce-Stripe',
         ) );
 
-        return S4WC_API::parse_response( $response );
+        return P4WC_API::parse_response( $response );
     }
 
     /**
@@ -181,19 +181,19 @@ class S4WC_API {
      * @return      array
      */
     public static function delete_data( $delete_location ) {
-        global $s4wc;
+        global $p4wc;
 
         $response = wp_remote_post( self::$api_endpoint . $delete_location, array(
             'method'        => 'DELETE',
             'headers'       => array(
-                'Authorization' => 'Basic ' . base64_encode( $s4wc->settings['secret_key'] . ':' ),
+                'Authorization' => 'Basic ' . base64_encode( $p4wc->settings['secret_key'] . ':' ),
             ),
             'timeout'       => 70,
             'sslverify'     => false,
             'user-agent'    => 'WooCommerce-Stripe',
         ) );
 
-        return S4WC_API::parse_response( $response );
+        return P4WC_API::parse_response( $response );
     }
 
     /**
@@ -205,11 +205,11 @@ class S4WC_API {
      */
     public static function parse_response( $response ) {
         if ( is_wp_error( $response ) ) {
-            throw new Exception( 's4wc_problem_connecting' );
+            throw new Exception( 'p4wc_problem_connecting' );
         }
 
         if ( empty( $response['body'] ) ) {
-            throw new Exception( 's4wc_empty_response' );
+            throw new Exception( 'p4wc_empty_response' );
         }
 
         $parsed_response = json_decode( $response['body'] );
@@ -218,7 +218,7 @@ class S4WC_API {
         if ( ! empty( $parsed_response->error ) && ! empty( $parsed_response->error->code ) ) {
             throw new Exception( $parsed_response->error->code );
         } elseif ( empty( $parsed_response->id ) ) {
-            throw new Exception( 's4wc_invalid_response' );
+            throw new Exception( 'p4wc_invalid_response' );
         }
 
         return $parsed_response;

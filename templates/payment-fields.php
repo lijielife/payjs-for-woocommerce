@@ -2,7 +2,7 @@
 /**
  * The Template for displaying the credit card form on the checkout page
  *
- * Override this template by copying it to yourtheme/woocommerce/s4wc/payment-fields.php
+ * Override this template by copying it to yourtheme/woocommerce/p4wc/payment-fields.php
  *
  * @author      Stephen Zuniga
  */

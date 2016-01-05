@@ -1,4 +1,4 @@
-/* global Stripe, s4wc_info */
+/* global Stripe, p4wc_info */
 
 // Set API key
 Stripe.setPublishableKey( s4wc_info.publishableKey );
