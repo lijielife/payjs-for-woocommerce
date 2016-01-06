@@ -20,7 +20,7 @@ class P4WC {
     public function __construct() {
         global $wpdb;
 
-        // Include Stripe Methods
+        // Include Pay.js Methods
         include_once( 'classes/class-p4wc_api.php' );
 
         // Include Database Manipulation Methods
@@ -56,7 +56,7 @@ class P4WC {
     }
 
     /**
-     * Add Stripe Gateway to WooCommerces list of Gateways
+     * Add Pay.js Gateway to WooCommerces list of Gateways
      *
      * @access      public
      * @param       array $methods
@@ -82,7 +82,7 @@ class P4WC {
     }
 
     /**
-     * Localize Stripe error messages
+     * Localize Pay.js error messages
      *
      * @access      protected
      * @param       Exception $e
@@ -92,7 +92,7 @@ class P4WC {
 
         switch ( $e->getMessage() ) {
 
-            // Messages from Stripe API
+            // Messages from Pay.js API //add all of the other ones 
             case 'incorrect_number':
                 $message = __( 'Your card number is incorrect.', 'payjs-for-woocommerce' );
                 break;
@@ -169,10 +169,10 @@ class P4WC {
                         )
                     );
 
-                    // Save Stripe fee
+                    // Save Pay.js fee
                     if ( isset( $charge->balance_transaction ) && isset( $charge->balance_transaction->fee ) ) {
                         $payjs_fee = number_format( $charge->balance_transaction->fee / 100, 2, '.', '' );
-                        update_post_meta( $order_id, 'Stripe Fee', $payjs_fee );
+                        update_post_meta( $order_id, 'Pay.js Fee', $payjs_fee );
                     }
                 }
             } catch ( Exception $e ) {

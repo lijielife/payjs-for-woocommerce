@@ -115,13 +115,13 @@ class P4WC_Gateway extends WC_Payment_Gateway {
 
         // Check for API Keys
         if ( ! $p4wc->settings['publishable_key'] && ! $p4wc->settings['secret_key'] ) {
-            echo '<div class="error"><p>' . __( 'Stripe needs API Keys to work, please find your secret and publishable keys in the <a href="https://manage.stripe.com/account/apikeys" target="_blank">Stripe accounts section</a>.', 'stripe-for-woocommerce' ) . '</p></div>';
+            echo '<div class="error"><p>' . __( 'Pay.jp needs API Keys to work, please find your secret and publishable keys in the <a href="https://pay.jp/dashboard/settings#api-key" target="_blank">Pay.jp accounts section</a>.', 'payjp-for-woocommerce' ) . '</p></div>';
             return false;
         }
 
         // Force SSL on production
         if ( $this->settings['testmode'] == 'no' && get_option( 'woocommerce_force_ssl_checkout' ) == 'no' ) {
-            echo '<div class="error"><p>' . __( 'Stripe needs SSL in order to be secure. Read mode about forcing SSL on checkout in <a href="http://docs.woothemes.com/document/ssl-and-https/" target="_blank">the WooCommerce docs</a>.', 'stripe-for-woocommerce' ) . '</p></div>';
+            echo '<div class="error"><p>' . __( 'Stripe needs SSL in order to be secure. Read mode about forcing SSL on checkout in <a href="http://docs.woothemes.com/document/ssl-and-https/" target="_blank">the WooCommerce docs</a>.', 'payjp-for-woocommerce' ) . '</p></div>';
             return false;
         }
 
@@ -142,13 +142,13 @@ class P4WC_Gateway extends WC_Payment_Gateway {
                         if ( $result !== false ) :
                             ?>
                             <div class="updated">
-                                <p><?php _e( 'Stripe Test Data successfully deleted.', 'stripe-for-woocommerce' ); ?></p>
+                                <p><?php _e( 'Stripe Test Data successfully deleted.', 'payjp-for-woocommerce' ); ?></p>
                             </div>
                             <?php
                         else :
                             ?>
                             <div class="error">
-                                <p><?php _e( 'Unable to delete Stripe Test Data', 'stripe-for-woocommerce' ); ?></p>
+                                <p><?php _e( 'Unable to delete Stripe Test Data', 'payjp-for-woocommerce' ); ?></p>
                             </div>
                             <?php
                         endif;
@@ -158,10 +158,10 @@ class P4WC_Gateway extends WC_Payment_Gateway {
                     else {
                         ?>
                         <div class="error">
-                            <p><?php _e( 'Are you sure you want to delete all test data? This action cannot be undone.', 'stripe-for-woocommerce' ); ?></p>
+                            <p><?php _e( 'Are you sure you want to delete all test data? This action cannot be undone.', 'payjp-for-woocommerce' ); ?></p>
                             <p>
-                                <a href="<?php echo wp_nonce_url( admin_url( $options_base . '&action=delete_test_data&confirm=yes' ), 'p4wc_action' ); ?>" class="button"><?php _e( 'Delete', 'stripe-for-woocommerce' ); ?></a>
-                                <a href="<?php echo admin_url( $options_base ); ?>" class="button"><?php _e( 'Cancel', 'stripe-for-woocommerce' ); ?></a>
+                                <a href="<?php echo wp_nonce_url( admin_url( $options_base . '&action=delete_test_data&confirm=yes' ), 'p4wc_action' ); ?>" class="button"><?php _e( 'Delete', 'payjp-for-woocommerce' ); ?></a>
+                                <a href="<?php echo admin_url( $options_base ); ?>" class="button"><?php _e( 'Cancel', 'payjp-for-woocommerce' ); ?></a>
                             </p>
                         </div>
                         <?php
@@ -182,7 +182,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
             'enabled' => array(
                 'type'          => 'checkbox',
                 'title'         => __( 'Enable/Disable', 'payjs-for-woocommerce' ),
-                'label'         => __( 'Enable Stripe for WooCommerce', 'payjs-for-woocommerce' ),
+                'label'         => __( 'Enable Pay.js for WooCommerce', 'payjs-for-woocommerce' ),
                 'default'       => 'yes'
             ),
             'title' => array(
@@ -210,7 +210,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
             'additional_fields' => array(
                 'type'          => 'checkbox',
                 'title'         => __( 'Additional Fields', 'payjs-for-woocommerce' ),
-                'description'   => __( 'Add a Billing ZIP and a Name on Card for Stripe authentication purposes. This is only neccessary if you check the "Only ship to the users billing address" box on WooCommerce Shipping settings.', 'stripe-for-woocommerce' ),
+                'description'   => __( 'Add a Billing ZIP and a Name on Card for Stripe authentication purposes. This is only neccessary if you check the "Only ship to the users billing address" box on WooCommerce Shipping settings.', 'payjp-for-woocommerce' ),
                 'label'         => __( 'Use Additional Fields', 'payjs-for-woocommerce' ),
                 'default'       => 'no'
             ),
@@ -262,15 +262,15 @@ class P4WC_Gateway extends WC_Payment_Gateway {
         $options_base = 'admin.php?page=wc-settings&tab=checkout&section=' . strtolower( get_class( $this ) );
         ?>
         <h3><?php echo ( ! empty( $this->method_title ) ) ? $this->method_title : __( 'Settings', 'woocommerce' ) ; ?></h3>
-        <p><?php _e( 'Allows Credit Card payments through <a href="https://stripe.com/">Stripe</a>. You can find your API Keys in your <a href="https://dashboard.stripe.com/account/apikeys">Stripe Account Settings</a>.', 'stripe-for-woocommerce' ); ?></p>
+        <p><?php _e( 'Allows Credit Card payments through <a href="https://pay.jp/">Pay.jp</a>. You can find your API Keys in your <a href="https://pay.jp/dashboard/settings#api-key">Pay.jp Account Settings</a>.', 'payjp-for-woocommerce' ); ?></p>
         <table class="form-table">
             <?php $this->generate_settings_html(); ?>
             <tr>
-                <th><?php _e( 'Delete Stripe Test Data', 'stripe-for-woocommerce' ); ?></th>
+                <th><?php _e( 'Delete Pay.jp Test Data', 'payjp-for-woocommerce' ); ?></th>
                 <td>
                     <p>
-                        <a href="<?php echo wp_nonce_url( admin_url( $options_base . '&action=delete_test_data' ), 'p4wc_action' ); ?>" class="button"><?php _e( 'Delete all Test Data', 'stripe-for-woocommerce' ); ?></a>
-                        <span class="description"><?php _e( '<strong class="red">Warning:</strong> This will delete all Stripe test customer data, make sure to back up your database.', 'stripe-for-woocommerce' ); ?></span>
+                        <a href="<?php echo wp_nonce_url( admin_url( $options_base . '&action=delete_test_data' ), 'p4wc_action' ); ?>" class="button"><?php _e( 'Delete all Test Data', 'payjp-for-woocommerce' ); ?></a>
+                        <span class="description"><?php _e( '<strong class="red">Warning:</strong> This will delete all Pay.jp test customer data, make sure to back up your database.', 'payjp-for-woocommerce' ); ?></span>
                     </p>
                 </td>
             </tr>
@@ -281,7 +281,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
 
     /**
      * Load dependent scripts
-     * - stripe.js from the stripe servers
+     * - pay.jp js from the pay.jp servers
      * - p4wc.js for handling the data to submit to stripe
      *
      * @access      public
@@ -291,10 +291,11 @@ class P4WC_Gateway extends WC_Payment_Gateway {
         global $p4wc;
 
         // Main stripe js
-        wp_enqueue_script( 'stripe', 'https://js.stripe.com/v2/', false, '2.0', true );
+        wp_enqueue_script( 'payjs', 'https://js.pay.jp', false, '2.0', true );
 
         // Plugin js
-        wp_enqueue_script( 'p4wc_js', plugins_url( 'assets/js/p4wc.min.js', dirname( __FILE__ ) ), array( 'stripe', 'wc-credit-card-form' ), '1.36', true );
+        wp_enqueue_script( 'p4wc_js', plugins_url( 'assets/js/p4wc.js', dirname( __FILE__ ) ), array( 'stripe', 'wc-credit-card-form' ), '1.36', true );
+        //was minifed before
 
         // Add data that p4wc.js needs
         $p4wc_info = array(
@@ -344,7 +345,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
         }
 
         woocommerce_form_field( 'billing-name', array(
-            'label'             => __( 'Name on Card', 'stripe-for-woocommerce' ),
+            'label'             => __( 'Name on Card', 'payjp-for-woocommerce' ),
             'required'          => true,
             'class'             => array( 'form-row-first' ),
             'input_class'       => array( 'p4wc-billing-name' ),
@@ -354,7 +355,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
         ) );
 
         woocommerce_form_field( 'billing-zip', array(
-            'label'             => __( 'Billing Zip', 'stripe-for-woocommerce' ),
+            'label'             => __( 'Billing Zip', 'payjp-for-woocommerce' ),
             'required'          => true,
             'class'             => array( 'form-row-last' ),
             'input_class'       => array( 'p4wc-billing-zip' ),
@@ -387,7 +388,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
 
         woocommerce_form_field( 'p4wc_save_card', array(
             'type'              => 'checkbox',
-            'label'             => __( 'Save Card Details For Later', 'stripe-for-woocommerce' ),
+            'label'             => __( 'Save Card Details For Later', 'payjp-for-woocommerce' ),
             'class'             => array( 'form-row-wide' ),
             'input_class'       => array( 'p4wc-save-card' ),
             'custom_attributes' => array(
@@ -423,15 +424,15 @@ class P4WC_Gateway extends WC_Payment_Gateway {
 
         $form_fields = array(
             'card-number' => array(
-                'name'       => __( 'Credit Card Number', 'stripe-for-woocommerce' ),
+                'name'       => __( 'Credit Card Number', 'payjp-for-woocommerce' ),
                 'error_type' => isset( $_POST['p4wc-card-number'] ) ? $_POST['p4wc-card-number'] : null,
             ),
             'card-expiry' => array(
-                'name'       => __( 'Credit Card Expiration', 'stripe-for-woocommerce' ),
+                'name'       => __( 'Credit Card Expiration', 'payjp-for-woocommerce' ),
                 'error_type' => isset( $_POST['p4wc-card-expiry'] ) ? $_POST['p4wc-card-expiry'] : null,
             ),
             'card-cvc'    => array(
-                'name'       => __( 'Credit Card CVC', 'stripe-for-woocommerce' ),
+                'name'       => __( 'Credit Card CVC', 'payjp-for-woocommerce' ),
                 'error_type' => isset( $_POST['p4wc-card-cvc'] ) ? $_POST['p4wc-card-cvc'] : null,
             ),
         );
@@ -455,9 +456,9 @@ class P4WC_Gateway extends WC_Payment_Gateway {
     protected function get_form_error_message( $field_name, $error_type = 'undefined' ) {
 
         if ( $error_type === 'invalid' ) {
-            return sprintf( __( 'Please enter a valid %s.', 'stripe-for-woocommerce' ), "<strong>$field_name</strong>" );
+            return sprintf( __( 'Please enter a valid %s.', 'payjp-for-woocommerce' ), "<strong>$field_name</strong>" );
         } else {
-            return sprintf( __( '%s is a required field.', 'stripe-for-woocommerce' ), "<strong>$field_name</strong>" );
+            return sprintf( __( '%s is a required field.', 'payjp-for-woocommerce' ), "<strong>$field_name</strong>" );
         }
     }
 
@@ -484,7 +485,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
 
             // Add a generic error message if we don't currently have any others
             if ( wc_notice_count( 'error' ) == 0 ) {
-                wc_add_notice( __( 'Transaction Error: Could not complete your payment.', 'stripe-for-woocommerce' ), 'error' );
+                wc_add_notice( __( 'Transaction Error: Could not complete your payment.', 'payjp-for-woocommerce' ), 'error' );
             }
         }
     }
@@ -508,7 +509,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
         if ( ! $this->transaction_id ) {
             return new WP_Error( 'p4wc_refund_error',
                 sprintf(
-                    __( '%s Credit Card Refund failed because the Transaction ID is missing.', 'stripe-for-woocommerce' ),
+                    __( '%s Credit Card Refund failed because the Transaction ID is missing.', 'payjp-for-woocommerce' ),
                     get_class( $this )
                 )
             );
@@ -536,7 +537,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
 
             $this->order->add_order_note(
                 sprintf(
-                    __( '%s Credit Card Refund Failed with message: "%s"', 'stripe-for-woocommerce' ),
+                    __( '%s Credit Card Refund Failed with message: "%s"', 'payjp-for-woocommerce' ),
                     get_class( $this ),
                     $this->transaction_error_message
                 )
@@ -595,7 +596,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
 
             $this->transaction_error_message = $p4wc->get_error_message( $e );
 
-            wc_add_notice( __( 'Error:', 'stripe-for-woocommerce' ) . ' ' . $this->transaction_error_message, 'error' );
+            wc_add_notice( __( 'Error:', 'payjp-for-woocommerce' ) . ' ' . $this->transaction_error_message, 'error' );
 
             return false;
         }
@@ -688,9 +689,9 @@ class P4WC_Gateway extends WC_Payment_Gateway {
 
         // Set a default name, override with a product name if it exists for Stripe's dashboard
         if ( $type === 'subscription' ) {
-            $product_name = __( 'Subscription', 'stripe-for-woocommerce' );
+            $product_name = __( 'Subscription', 'payjp-for-woocommerce' );
         } else {
-            $product_name = __( 'Purchases', 'stripe-for-woocommerce' );
+            $product_name = __( 'Purchases', 'payjp-for-woocommerce' );
         }
 
         // Grab first viable product name and use it
@@ -707,7 +708,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
 
         // Charge description
         $charge_description = sprintf(
-            __( 'Payment for %s (Order: %s)', 'stripe-for-woocommerce' ),
+            __( 'Payment for %s (Order: %s)', 'payjp-for-woocommerce' ),
             $product_name,
             $this->order->get_order_number()
         );
@@ -728,7 +729,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
     protected function payment_failed() {
         $this->order->add_order_note(
             sprintf(
-                __( '%s payment failed with message: "%s"', 'stripe-for-woocommerce' ),
+                __( '%s payment failed with message: "%s"', 'payjp-for-woocommerce' ),
                 get_class( $this ),
                 $this->transaction_error_message
             )
@@ -751,7 +752,7 @@ class P4WC_Gateway extends WC_Payment_Gateway {
 
         $this->order->add_order_note(
             sprintf(
-                __( '%s payment completed with Transaction Id of "%s"', 'stripe-for-woocommerce' ),
+                __( '%s payment completed with Transaction Id of "%s"', 'payjp-for-woocommerce' ),
                 get_class( $this ),
                 $this->transaction_id
             )

@@ -4,15 +4,15 @@
  *
  * Provides a Stripe Payment Gateway for Subscriptions.
  *
- * @class       S4WC_Subscriptions_Gateway
- * @extends     S4WC_Gateway
+ * @class       P4WC_Subscriptions_Gateway
+ * @extends     P4WC_Gateway
  * @package     WooCommerce/Classes/Payment
  * @author      Stephen Zuniga
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-class S4WC_Subscriptions_Gateway extends S4WC_Gateway {
+class P4WC_Subscriptions_Gateway extends P4WC_Gateway {
 
     public function __construct() {
         parent::__construct();
@@ -64,7 +64,7 @@ class S4WC_Subscriptions_Gateway extends S4WC_Gateway {
      * @return      array
      */
     public function process_subscription_payment( $amount = 0 ) {
-        global $s4wc;
+        global $p4wc;
 
         // Can't send to stripe without a value, assume it's good to go.
         if ( $amount === 0 ) {
@@ -72,10 +72,10 @@ class S4WC_Subscriptions_Gateway extends S4WC_Gateway {
         }
 
         // Get customer id
-        $customer = get_user_meta( $this->order->user_id, $s4wc->settings['stripe_db_location'], true );
+        $customer = get_user_meta( $this->order->user_id, $p4wc->settings['stripe_db_location'], true );
 
         // Allow options to be set without modifying sensitive data like amount, currency, etc.
-        $stripe_charge_data = apply_filters( 's4wc_subscription_charge_data', array(), $this->order );
+        $stripe_charge_data = apply_filters( 'p4wc_subscription_charge_data', array(), $this->order );
 
         // Set up basics for charging
         $stripe_charge_data['amount']      = $amount * 100; // amount in cents
@@ -85,7 +85,7 @@ class S4WC_Subscriptions_Gateway extends S4WC_Gateway {
         $stripe_charge_data['description'] = $this->get_charge_description( 'subscription' );
         $stripe_charge_data['expand[]']    = 'balance_transaction';
 
-        $charge = S4WC_API::create_charge( $stripe_charge_data );
+        $charge = P4WC_API::create_charge( $stripe_charge_data );
 
         if ( isset( $charge->id ) ) {
             $this->order->add_order_note( sprintf( __( 'Subscription paid (%s)', 'stripe-for-woocommerce' ), $charge->id ) );
@@ -124,17 +124,17 @@ class S4WC_Subscriptions_Gateway extends S4WC_Gateway {
      * @return      void
      */
     private function charge_set_up() {
-        global $s4wc;
+        global $p4wc;
 
         // Add a customer or retrieve an existing one
         $customer = $this->get_customer();
 
-        $customer_info = get_user_meta( $this->order->user_id, $s4wc->settings['stripe_db_location'], true );
+        $customer_info = get_user_meta( $this->order->user_id, $p4wc->settings['stripe_db_location'], true );
 
         // Update default card
         if ( $this->form_data['chosen_card'] !== 'new' ) {
             $default_card = $customer_info['cards'][ intval( $this->form_data['chosen_card'] ) ]['id'];
-            S4WC_DB::update_customer( $this->order->user_id, array( 'default_card' => $default_card ) );
+            P4WC_DB::update_customer( $this->order->user_id, array( 'default_card' => $default_card ) );
         }
 
         $initial_payment = WC_Subscriptions_Order::get_total_initial_payment( $this->order );

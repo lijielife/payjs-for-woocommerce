@@ -9,7 +9,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 class P4WC_API {
-    public static $api_endpoint = sk_test_c62fade9d045b54cd76d7036;
+    public static $api_endpoint = "https://api.pay.jp/";
 
     /**
      * Create customer on stripe servers

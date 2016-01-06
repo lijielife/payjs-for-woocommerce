@@ -8,7 +8,7 @@ var gulp       = require('gulp'),
     rename     = require('gulp-rename');
 
 var files = {
-    js   : ['./assets/js/s4wc.js'],
+    js   : ['./assets/js/p4wc.js'],
 };
 
 gulp.task('lint', function () {
